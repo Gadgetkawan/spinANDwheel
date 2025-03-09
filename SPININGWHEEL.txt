@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spinning Wheel</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        canvas { border: 5px solid black; margin-top: 20px; }
+        button { margin-top: 20px; padding: 10px 20px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h1>Spin the Wheel!</h1>
+    <canvas id="wheelCanvas" width="300" height="300"></canvas>
+    <br>
+    <button onclick="spinWheel()">Spin</button>
+
+    <script>
+        let canvas = document.getElementById("wheelCanvas");
+        let ctx = canvas.getContext("2d");
+        let sections = ["Red", "Blue", "Green", "Yellow", "Purple", "Orange"];
+        let colors = ["#FF0000", "#0000FF", "#008000", "#FFFF00", "#800080", "#FFA500"];
+        let startAngle = 0;
+        let arc = Math.PI / (sections.length / 2);
+        let spinAngle = 0;
+        let spinning = false;
+
+        function drawWheel() {
+            for (let i = 0; i < sections.length; i++) {
+                let angle = startAngle + i * arc;
+                ctx.fillStyle = colors[i];
+                ctx.beginPath();
+                ctx.moveTo(150, 150);
+                ctx.arc(150, 150, 150, angle, angle + arc, false);
+                ctx.lineTo(150, 150);
+                ctx.fill();
+            }
+        }
+
+        function spinWheel() {
+            if (!spinning) {
+                spinning = true;
+                let spins = Math.random() * 10 + 10;
+                let spinInterval = setInterval(() => {
+                    startAngle += Math.PI / 10;
+                    ctx.clearRect(0, 0, 300, 300);
+                    drawWheel();
+                    spins -= 0.5;
+                    if (spins <= 0) {
+                        clearInterval(spinInterval);
+                        spinning = false;
+                    }
+                }, 50);
+            }
+        }
+
+        drawWheel();
+    </script>
+</body>
+</html>
